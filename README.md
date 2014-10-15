@@ -2,9 +2,9 @@ ASCII timer in the terminal, because I got bored in a lecture.
 
 usage:
 
-$ python timer.py d
+$ python timer.py [[[ h ] m ] s]
 
-where d is the timer's duration in seconds. The default timer is 5 minutes.
+where h, m and s specify the timer's duration. The default is 5 minutes.
 
 CTRL+C to quit at any time.
 
