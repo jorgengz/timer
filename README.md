@@ -4,7 +4,7 @@ usage:
 
 $ python timer.py d
 
-where d is the timer's duration in seconds.
+where d is the timer's duration in seconds. The default timer is 5 minutes.
 
 CTRL+C to quit at any time.
 
