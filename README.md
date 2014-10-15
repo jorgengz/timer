@@ -6,6 +6,8 @@ $ python timer.py d
 
 where d is the timer's duration in seconds.
 
+CTRL+C to quit at any time.
+
 feel free to do
 
 $ cp timer.py /usr/local/bin/timer
