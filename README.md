@@ -8,7 +8,10 @@ where d is the timer's duration in seconds.
 
 CTRL+C to quit at any time.
 
-feel free to do
+Flashes and beeps annoyingly on completion if you enable the visual and
+audible bells of your terminal (resp.).
+
+Feel free to do
 
 $ cp timer.py /usr/local/bin/timer
 
@@ -17,6 +20,3 @@ to access it from anywhere with
 $ timer d
 
 ... it is that cool after all.
-
-Flashes and beeps annoyingly on completion if you enable the visual and
-audible bells of your terminal (resp.).
