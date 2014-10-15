@@ -3,11 +3,6 @@ import sys
 import time
 import curses
 
-def write_to_terminal(message, delay):
-    sys.stdout.write(message)
-    sys.stdout.flush()
-    time.sleep(delay)
-
 def write(screen, message, alarm=True, delay=0.2, x=0, y=0):
     if alarm:
         sys.stdout.write("\a")
@@ -15,7 +10,7 @@ def write(screen, message, alarm=True, delay=0.2, x=0, y=0):
     screen.refresh()
     time.sleep(delay)
 
-def msg_to_whitespace(s):
+def _msg_to_whitespace(s):
     """
     Convert a multiline string using newline characters to whitespace in the
     corresponding area.
@@ -189,27 +184,16 @@ def done(screen):
                     #    #   #     #   #     ##   #         \n\
                     #####     #####    #      #   ######   #\n"
 
-    empty = msg_to_whitespace(done)
+    empty = _msg_to_whitespace(done)
 
     write(screen, " " * 79, alarm=False, delay=0, x=11)
     while True:
         write(screen, empty, x=7)
         write(screen, done, x=7)
 
-def get_duration():
-    """
-    Gets the duration of the timer from the cml.
-
-    Defaults to 5 minutes if nothing is given.
-    """
-    return int(sys.argv[1]) if len(sys.argv) > 1 else 300
-
-
-t = get_duration()
-
 def out(t):
     """
-    Creates the output for a time 't' in seconds.
+    Converts a time 't' in seconds to ASCII output.
     """
     hour = number_to_ASCII(int(t/3600.))
     minute = number_to_ASCII(int((t % 3600) / 60.))
@@ -219,18 +203,28 @@ def out(t):
 
     return combine_ASCII(whitespace, hour, colon, minute, colon, second)
 
-try:
-    stdscreen = curses.initscr()
-    curses.noecho()
-    curses.cbreak()
-    while t > 0:
-        write(stdscreen, out(t), alarm=False, delay=1, x=7)
-        t -= 1
-    done(stdscreen)
-except:
-    sys.stdout.write("")
-finally:
-    curses.echo()
-    curses.nocbreak()
-    curses.endwin()
+def get_duration():
+    """
+    Gets the duration of the timer from the cml.
+
+    Defaults to 5 minutes if nothing is given.
+    """
+    return int(sys.argv[1]) if len(sys.argv) > 1 else 300
+
+if __name__ == "__main__":
+    try:
+        t = get_duration()
+        stdscreen = curses.initscr()
+        curses.noecho()
+        curses.cbreak()
+        while t > 0:
+            write(stdscreen, out(t), alarm=False, delay=1, x=7)
+            t -= 1
+        done(stdscreen)
+    except:
+        sys.stdout.write("")
+    finally:
+        curses.echo()
+        curses.nocbreak()
+        curses.endwin()
 
