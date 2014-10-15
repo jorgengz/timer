@@ -193,7 +193,6 @@ def done(screen):
 
     empty = _msg_to_whitespace(done)
 
-    write(screen, " " * 79, alarm=False, delay=0, x=11)
     while True:
         write(screen, empty, x=7)
         write(screen, done, x=7)
