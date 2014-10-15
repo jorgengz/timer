@@ -17,6 +17,6 @@ $ cp timer.py /usr/local/bin/timer
 
 to access it from anywhere with
 
-$ timer d
+$ timer [[[ h ] m ] s]
 
 ... it is that cool after all.
