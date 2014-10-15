@@ -1,4 +1,4 @@
-ASCII timer in the terminal, because I wanted to.
+ASCII timer in the terminal, because I got bored in a lecture.
 
 usage:
 
