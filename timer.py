@@ -1,4 +1,11 @@
 #! /usr/bin/env python
+"""ASCII countdown timer for the Terminal."""
+__author__ = "Jorgen Granseth"
+__copyright__ = "Jorgen Granseth"
+__license__ = "GPL"
+__version__ = "2.0"
+__maintainer__ = "Jorgen Granseth"
+__email__ = "jorgengranseth@gmail.com"
 import sys
 import time
 import curses
