@@ -3,15 +3,6 @@ import sys
 import time
 import curses
 
-# TODO:
-#   Add support for hours, maybe days?
-#   Make ASCII numbers
-
-def clear_and_delay(d):
-    sys.stdout.write(empty)
-    sys.stdout.flush()
-    time.sleep(d)
-
 def write_to_terminal(message, delay):
     sys.stdout.write(message)
     sys.stdout.flush()
@@ -25,6 +16,10 @@ def write(screen, message, alarm=True, delay=0.2, x=0, y=0):
     time.sleep(delay)
 
 def msg_to_whitespace(s):
+    """
+    Convert a multiline string using newline characters to whitespace in the
+    corresponding area.
+    """
     out = ""
     for char in s:
         if char != "\n":
@@ -33,45 +28,204 @@ def msg_to_whitespace(s):
             out += char
     return out
 
+def numbers():
+    """
+    Returns a list of the numbers 0-9 on ASCII form.
+    Colon (' :') is on index 10.
+    """
+    ZERO = "\
+  #### \n\
+ #    #\n\
+ #    #\n\
+ #    #\n\
+ #    #\n\
+ #    #\n\
+  #### \n\
+"
+
+    ONE = "\
+   ##  \n\
+  # #  \n\
+ #  #  \n\
+    #  \n\
+    #  \n\
+    #  \n\
+ ######\n\
+"
+    TWO = "\
+  #### \n\
+ #    #\n\
+ #   # \n\
+    #  \n\
+   #   \n\
+  #    \n\
+ ######\n\
+"
+
+    THREE = "\
+  #### \n\
+ #    #\n\
+      #\n\
+    ## \n\
+      #\n\
+ #    #\n\
+  #### \n\
+"
+
+    FOUR = "\
+ #   # \n\
+ #   # \n\
+ #   # \n\
+ ######\n\
+     # \n\
+     # \n\
+     # \n\
+"
+    FIVE = "\
+ ######\n\
+ #     \n\
+ #     \n\
+ ##### \n\
+      #\n\
+ #    #\n\
+  #### \n\
+"
+
+    SIX = "\
+  #### \n\
+ #    #\n\
+ #     \n\
+ ##### \n\
+ #    #\n\
+ #    #\n\
+  #### \n\
+"
+
+    SEVEN = "\
+ #######\n\
+ #    # \n\
+     #  \n\
+   ###  \n\
+   #    \n\
+  #     \n\
+ #      \n\
+"
+
+    EIGHT = "\
+  #### \n\
+ #    #\n\
+ #    #\n\
+  #### \n\
+ #    #\n\
+ #    #\n\
+  #### \n\
+"
+
+    NINE = "\
+  #### \n\
+ #    #\n\
+ #    #\n\
+  #####\n\
+      #\n\
+ #    #\n\
+  #### \n\
+"
+
+    COLON = "\
+  \n\
+  \n\
+ #\n\
+  \n\
+ #\n\
+  \n\
+  \n\
+"
+    WHITESPACE = "\
+                \n\
+                \n\
+                \n\
+                \n\
+                \n\
+                \n\
+                \n\
+"
+    return [ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE,\
+            COLON, WHITESPACE]
+
+def combine_ASCII(*nums):
+    """Combines ASCII art characters to one string."""
+    numbers = []
+    for k in range(len(nums)):
+        numbers.append([line for line in nums[k].split("\n") if line != ""])
+
+    ret = ""
+
+    for k in range(len(numbers[0])):
+        for number in numbers:
+            ret += number[k]
+        ret += "\n"
+
+    return ret
+
+def number_to_ASCII(n):
+    """
+    Returns integer n on ASCII form with two digits,
+    so 3 is returned as 03 while 15 is returned as 15.
+    """
+    s = "{:02d}".format(n)
+    num = numbers()
+    m = num[int(s[0])]
+    n = num[int(s[1])]
+
+    return combine_ASCII(m, n)
 
 def done(screen):
-    # done = "\a###DONE###\r"
-    # empty = "\a" + " " * max(50, len(done)) + "\r"
     done = "\
-                    #####     #####   ##     #    ######  #\n\
-                    #    #   #     #  # #    #    #       #\n\
-                    #    #   #     #  #  #   #    #       #\n\
-                    #    #   #     #  #   #  #    ####    #\n\
-                    #    #   #     #  #    # #    #       #\n\
-                    #    #   #     #  #     ##    #        \n\
-                    #####     #####   #      #    ######  #\n"
+                    #####     #####    ##     #   ######   #\n\
+                    #    #   #     #   # #    #   #        #\n\
+                    #    #   #     #   #  #   #   #        #\n\
+                    #    #   #     #   #   #  #   ####     #\n\
+                    #    #   #     #   #    # #   #        #\n\
+                    #    #   #     #   #     ##   #         \n\
+                    #####     #####    #      #   ######   #\n"
 
     empty = msg_to_whitespace(done)
 
-    write(screen, " " * 50, alarm=False, delay=0, x=11, y=30)
+    write(screen, " " * 79, alarm=False, delay=0, x=11)
     while True:
         write(screen, empty, x=7)
         write(screen, done, x=7)
-        # sys.stdout.write("\a")
-        # write_to_terminal(empty, 0.2)
-        # write_to_terminal(done, 0.2)
 
-if len(sys.argv) > 1:
-    x = int(sys.argv[1])
-else:
-    x = 300
+def get_duration():
+    """
+    Gets the duration of the timer from the cml.
 
-out = "Time left: %02d:%02d"
+    Defaults to 5 minutes if nothing is given.
+    """
+    return int(sys.argv[1]) if len(sys.argv) > 1 else 300
+
+
+t = get_duration()
+
+def out(t):
+    """
+    Creates the output for a time 't' in seconds.
+    """
+    hour = number_to_ASCII(int(t/3600.))
+    minute = number_to_ASCII(int((t % 3600) / 60.))
+    second = number_to_ASCII(t % 60)
+    colon = numbers()[10]
+    whitespace = numbers()[11]
+
+    return combine_ASCII(whitespace, hour, colon, minute, colon, second)
 
 try:
     stdscreen = curses.initscr()
     curses.noecho()
     curses.cbreak()
-    while x > 0:
-        msg = out % (int(x / 60.), x % 60)
-        write(stdscreen, msg, alarm=False, delay=1, x=11, y=30)
-        # write_to_terminal(msg, 1)
-        x -= 1
+    while t > 0:
+        write(stdscreen, out(t), alarm=False, delay=1, x=7)
+        t -= 1
     done(stdscreen)
 except:
     sys.stdout.write("")
