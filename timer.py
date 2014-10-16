@@ -6,6 +6,7 @@ __license__ = "GPL"
 __version__ = "2.0"
 __maintainer__ = "Jorgen Granseth"
 __email__ = "jorgengranseth@gmail.com"
+# TODO: Hide the cursor.
 
 import sys
 import time
@@ -135,9 +136,9 @@ def symbols():
     COLON = "\
   \n\
   \n\
- #\n\
+ o\n\
   \n\
- #\n\
+ o\n\
   \n\
   \n\
 "
