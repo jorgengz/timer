@@ -17,17 +17,15 @@ def write(screen, message, alarm=True, delay=0.2, x=0, y=0):
     screen.refresh()
     time.sleep(delay)
 
-def _msg_to_whitespace(s):
+def _string_to_whitespace(s):
     """
     Convert a multiline string using newline characters to whitespace in the
     corresponding area.
     """
     out = ""
-    for char in s:
-        if char != "\n":
-            out += " "
-        else:
-            out += char
+    for line in [x for x in s.split("\n") if x != ""]:
+        out += len(line) * " " + "\n"
+
     return out
 
 def numbers():
@@ -191,7 +189,7 @@ def done(screen):
                     #    #   #     #   #     ##   #         \n\
                     #####     #####    #      #   ######   #\n"
 
-    empty = _msg_to_whitespace(done)
+    empty = _string_to_whitespace(done)
 
     while True:
         write(screen, empty, x=7)
