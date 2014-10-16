@@ -216,12 +216,14 @@ def get_duration():
     num_args = len(sys.argv)
     t = 300         # Default time: 5 minutes
     if num_args == 2:
-        t = int(sys.argv[1])
+        t = float(sys.argv[1])
     elif num_args == 3:
-        t = int(sys.argv[1]) * 60 + int(sys.argv[2])
+        t = float(sys.argv[1]) * 60 + float(sys.argv[2])
     elif num_args == 4:
-        t = int(sys.argv[1]) * 3600 + int(sys.argv[2]) * 60 + int(sys.argv[3])
-    return t
+        t = float(sys.argv[1]) * 3600\
+            + float(sys.argv[2]) * 60\
+            + float(sys.argv[3])
+    return int(t)
 
 if __name__ == "__main__":
     try:

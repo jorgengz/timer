@@ -4,7 +4,8 @@ usage:
 
 $ python timer.py [[[ h ] m ] s]
 
-where h, m and s specify the timer's duration. The default is 5 minutes.
+where h, m and s specify the timer's duration (can be positive, negative and
+floats, all the timer does is count down). The default is 5 minutes.
 
 CTRL+C to quit at any time.
 
