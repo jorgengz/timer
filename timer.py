@@ -6,6 +6,7 @@ __license__ = "GPL"
 __version__ = "2.0"
 __maintainer__ = "Jorgen Granseth"
 __email__ = "jorgengranseth@gmail.com"
+
 import sys
 import time
 import curses
@@ -228,12 +229,15 @@ def get_duration():
 if __name__ == "__main__":
     try:
         t = get_duration()
+        end_time = time.time() + t
         stdscreen = curses.initscr()
         curses.noecho()
         curses.cbreak()
-        while t > 0:
-            write(stdscreen, out(t), alarm=False, delay=1, x=7)
-            t -= 1
+        while time.time() < end_time:
+            # Add 1 to display to account for the nanoseconds
+            # it takes to go from get_duration() to here:
+            remaining_time = int(end_time - time.time()) + 1
+            write(stdscreen, out(remaining_time), alarm=False, delay=1, x=7)
         done(stdscreen)
     except:
         sys.stdout.write("")
@@ -241,4 +245,3 @@ if __name__ == "__main__":
         curses.echo()
         curses.nocbreak()
         curses.endwin()
-
