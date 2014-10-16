@@ -28,10 +28,10 @@ def _string_to_whitespace(s):
 
     return out
 
-def numbers():
+def symbols():
     """
-    Returns a list of the numbers 0-9 on ASCII form.
-    Colon (' :') is on index 10.
+    Returns a list of the numbers 0-9 on ASCII form.  Colon (' :') is on index
+    10, and whitespace for fitting in a standard 80 x 24 terminal on index 11.
     """
     ZERO = "\
   #### \n\
@@ -154,14 +154,14 @@ def numbers():
 
 def combine_ASCII(*nums):
     """Combines ASCII art characters to one string."""
-    numbers = []
+    output = []
     for k in range(len(nums)):
-        numbers.append([line for line in nums[k].split("\n") if line != ""])
+        output.append([line for line in nums[k].split("\n") if line != ""])
 
     ret = ""
 
-    for k in range(len(numbers[0])):
-        for number in numbers:
+    for k in range(len(output[0])):
+        for number in output:
             ret += number[k]
         ret += "\n"
 
@@ -173,7 +173,7 @@ def number_to_ASCII(n):
     so 3 is returned as 03 while 15 is returned as 15.
     """
     s = "{:02d}".format(n)
-    num = numbers()
+    num = symbols()
     m = num[int(s[0])]
     n = num[int(s[1])]
 
@@ -202,8 +202,8 @@ def out(t):
     hour = number_to_ASCII(int(t/3600.))
     minute = number_to_ASCII(int((t % 3600) / 60.))
     second = number_to_ASCII(t % 60)
-    colon = numbers()[10]
-    whitespace = numbers()[11]
+    colon = symbols()[10]
+    whitespace = symbols()[11]
 
     return combine_ASCII(whitespace, hour, colon, minute, colon, second)
 
